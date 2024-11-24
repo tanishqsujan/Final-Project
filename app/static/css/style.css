@@ -250,3 +250,8 @@ body {
 .btn-submit:hover {
     background-color: #ff8566;
 }
+.quote{
+    color: white ;
+    font-style: italic;
+    margin-bottom: 30px;
+}
