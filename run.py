@@ -1,6 +1,13 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 import requests
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
+
+API_KEY = os.getenv('API_KEY')
 
 app = Flask(__name__, static_folder='app/static', template_folder='app/templates')
 
@@ -27,13 +34,13 @@ with app.app_context():
 def index():
     category = 'amazing' # Choose one of the categories from the API docs
     api_url = 'https://api.api-ninjas.com/v1/quotes?category={}'.format(category)
-    response = requests.get(api_url, headers={'X-Api-Key': 'u2xEpFSW6xPMMUJVoTO4YQ==U3SP8mv8K7tpD9kS'})
+    response = requests.get(api_url, headers={'X-Api-Key': API_KEY})
     if response.status_code == requests.codes.ok:
-     resp= response.json()
-     first_quote= resp[0]['quote']
+        resp = response.json()
+        first_quote = resp[0]['quote']
     else:
-     print("Error:", response.status_code, response.text)
-     first_quote= "Loading ..."
+        print("Error:", response.status_code, response.text)
+        first_quote = "Loading ..."
     comments = Comment.query.all()
     return render_template('index.html', comments=[{'NAME': c.name, 'POSITION': c.position, 'COMMENT': c.comment} for c in comments], amazing_quote=first_quote)
 
